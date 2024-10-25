@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1st period</title>
+  <style>
+    
+   
+    body {
+      font-family: Arial, sans-serif; /* フォントの変更 */
+      text-align: center;   /* 中央に配置 */
+      padding: 25px 0 40px; /* 上のパディングを調整 */
+      position: relative;    /* 相対位置 */
+    
+      background-image: url('img/back.png'); /* 背景画像のパスを指定 */
+      background-size: 100%; /* 画像を80%のサイズに縮小 */ /* 背景画像を画面全体に拡大 */
+      background-position: center 0.01px; /* 中央から20px下に配置 */
+      background-repeat: no-repeat; /* 画像を繰り返さない */
+    }
+  
+
+    h1 {
+      margin-bottom: 20px;  /* タイトルの下に間隔を空ける */
+    }
+
+    #game-icon {
+      width: 150px;     /* アイコン（絵）の幅の調整 */
+      height: 150px;
+      border-radius: 50%; /* border-radiusは要素の境界の外側の角を丸める機能 */
+      margin: 20px auto;  /* 要素の左右幅を自動的に計算して横方向に中央寄せする */
+    }
+
+    #word {
+      font-size: 26px;
+      margin: 25px 0;
+    }
+
+    #meaning {
+      font-size: 16px;
+      margin: 5px 0;
+      color: gray;
+    }
+
+    input[type="text"] {
+      font-size: 24px;
+      padding: 5px;
+      width: 300px;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+    }
+
+    #timer {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .hp-bar {
+      width: 200px;
+      height: 20px;
+      background-color: lightgray;
+      position: absolute;
+    }
+
+    .hp {
+      height: 100%;
+      background-color: green;
+      text-align: center;
+      color: white;
+    }
+
+    #player-hp-bar {
+      left: 10px;
+      bottom: 100px;
+    }
+
+    #opponent-hp-bar {
+      right: 10px;
+      top: 170px; /* 上に移動 */
+    }
+
+    #player-label {
+      position: absolute;
+      left: 10px;
+      bottom: 120px;
+      font-weight: bold;
+    }
+
+    #opponent-label {
+      position: absolute;
+      right: 10px;
+      top:150px; /* 上に移動 */
+      font-weight: bold;
+    }
+
+    #start-button, #end-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+
+    .highlight {
+      background-color: rgb(230, 201, 173);
+    }
+  </style>
+</head>
+<body>
+  <br><br><br><br>
+
+  <img id="game-icon" src="img\buleteacher.jpg" alt="Game Icon" />
+
+  <div id="opponent-label">相手のHP</div>
+  <div id="opponent-hp-bar" class="hp-bar">
+    <div id="opponent-hp" class="hp">100</div>
+  </div>
+
+  <div id="player-label">自分のHP</div>
+  <div id="player-hp-bar" class="hp-bar">
+    <div id="player-hp" class="hp">100</div>
+  </div>
+
+  <div id="word"></div> <!-- 表示される英単語 -->
+  <div id="meaning"></div>
+  <input type="text" id="input-box" placeholder="Type here..." disabled />
+  <div id="timer">Time left: <span id="time-left">7</span> seconds</div>
+  <div id="message"></div>
+  <button id="start-button">Start Game</button>
+  <button id="end-button" style="display:none;">End Game</button>
+  
+
+  <script>
+    const words = [
+    { "word": "anyway", "meaning": "(副) とにかく" },
+  { "word": "following", "meaning": "(前) ～に続いて (形) 次の、以下の" },
+  { "word": "refer", "meaning": "(動) 参照する、言及する、(人を)紹介する" },
+  { "word": "available", "meaning": "(形) 入手できる、利用できる、購入できる、手が空いている" },
+  { "word": "department", "meaning": "(名) 部門、売り場" },
+  { "word": "conference", "meaning": "(名) 会議" },
+  { "word": "according to", "meaning": "(前) ～によると、～に従って" },
+  { "word": "likely", "meaning": "(副) おそらく (形) ～しそうだ" },
+  { "word": "offer", "meaning": "(動) 申し出る、提供する (名) 申し出、オファー" },
+  { "word": "equipment", "meaning": "(名) 機器、装備" },
+  { "word": "provide", "meaning": "(動) 提供する" },
+  { "word": "local", "meaning": "(形) 地元の (名) 地元の人" },
+  { "word": "purchase", "meaning": "(動) 購入する (名) 購入品" },
+  { "word": "opening", "meaning": "(名) 空き、開店" },
+  { "word": "construction", "meaning": "(名) 建設" },
+  { "word": "tour", "meaning": "(動) 見学する、旅行する (名) 見学、旅行" },
+  { "word": "research", "meaning": "(名) 研究、調査 (動) 研究する、調査する" },
+  { "word": "attend", "meaning": "(動) 出席する、参加する" },
+  { "word": "delivery", "meaning": "(名) 配達" },
+  { "word": "recently", "meaning": "(副) 最近" },
+  { "word": "indicate", "meaning": "(動) 示す" },
+  { "word": "employee", "meaning": "(名) 社員、従業員" },
+  { "word": "additional", "meaning": "(形) 追加の" },
+  { "word": "survey", "meaning": "(名) アンケート調査 (動) アンケート調査を行う" },
+  { "word": "review", "meaning": "(動) 検討する、論評する (名) 検討、諭評" },
+  { "word": "production", "meaning": "(名) 生産、作品" },
+  { "word": "located", "meaning": "(形) 位置して" },
+  { "word": "detail", "meaning": "(名) 詳細 (動) 詳しく述べる" },
+  { "word": "announce", "meaning": "(動) 発表する" },
+  { "word": "repair", "meaning": "(名) 修理 (動) 修理する" },
+  { "word": "increase", "meaning": "(名) 増加 (動) 増える、増やす" },
+  { "word": "include", "meaning": "(動) 含む" },
+  { "word": "currently", "meaning": "(副) 現在" },
+  { "word": "advertising", "meaning": "(名) 広告、宣伝" },
+  { "word": "charge", "meaning": "(動) 請求する (名) 料金、責任" },
+  { "word": "expect", "meaning": "(動) 予期する、予定する" },
+  { "word": "firm", "meaning": "(名) 会社" },
+  { "word": "client", "meaning": "(名) 顧客、クライアント" },
+  { "word": "financial", "meaning": "(形) お金の、財務の、金融の" },
+  { "word": "annual", "meaning": "(形) 年に一度の、毎年恒例の、年間の" },
+  { "word": "payment", "meaning": "(名) 支払い" },
+  { "word": "budget", "meaning": "(名) 予算 (動) 予算に計上する" },
+  { "word": "application", "meaning": "(名) 応募書類、応募、申請" },
+  { "word": "contract", "meaning": "(名) 契約" },
+  { "word": "management", "meaning": "(名) 経営、管理" },
+  { "word": "performance", "meaning": "(名) 業績、仕事ぶり、性能、公演" },
+  { "word": "pleased", "meaning": "(形) 喜んで、満足して" },
+  { "word": "confirm", "meaning": "(動) 確認する" },
+  { "word": "award", "meaning": "(名) 賞 (動) 授与する" },
+  { "word": "clothing", "meaning": "(名) 衣類" },
+  { "word": "display", "meaning": "(名) 展示 (動) 展示する" },
+  { "word": "candidate", "meaning": "(名) 候補者" },
+  { "word": "state", "meaning": "(動) 述べる" },
+  { "word": "exhibit", "meaning": "(名) 展示物、展示会 (動) 展示する" },
+  { "word": "session", "meaning": "(名) 時間、集まり" },
+  { "word": "note", "meaning": "(動) 注意する、述べる (名) メモ" },
+  { "word": "process", "meaning": "(動) 処理する (名) プロセス、過程、処理" },
+  { "word": "instruction", "meaning": "(名) 説明書、説明、指示" },
+  { "word": "membership", "meaning": "(名) 会員、会員資格、会員数" },
+  { "word": "agency", "meaning": "(名) 代理店、機関" },
+  { "word": "based", "meaning": "(形) 拠点のある、基づく" },
+  { "word": "facility", "meaning": "(名) 施設" },
+  { "word": "advance", "meaning": "(形) 先行した、事前の (名) 進捗、前進" },
+  { "word": "committee", "meaning": "(名) 委員会" },
+  { "word": "successful", "meaning": "(形) 成功した、うまく行く" },
+  { "word": "excellent", "meaning": "(形) 素晴らしい" },
+  { "word": "industry", "meaning": "(名) 産業、業界" },
+  { "word": "fee", "meaning": "(名) 料金" },
+  { "word": "accept", "meaning": "(動) 受け入れる" },
+  { "word": "upcoming", "meaning": "(形) 今度の" },
+  { "word": "latest", "meaning": "(形)最新の" },
+  { "word": "submit", "meaning": "(動)提出する" },
+  { "word": "transportation", "meaning": "(名)輸送手段" },
+  { "word": "resume", "meaning": "(名)履歴書" },
+  { "word": "introduce", "meaning": "(動)導入する、紹介する" },
+  { "word": "previous", "meaning": "(形)前の、以前の" },
+  { "word": "proposal", "meaning": "(名)提案、提案書" },
+  { "word": "supply", "meaning": "(名)必需品 (動)供給する" },
+  { "word": "enclose", "meaning": "(動)同封する、囲む" },
+  { "word": "policy", "meaning": "(名)規定、方針" },
+  { "word": "register", "meaning": "(動)登録する (名)レジ" },
+  { "word": "arrange", "meaning": "(動)手配する、並べる" },
+  { "word": "bill", "meaning": "(名)請求書 (動)請求書を送る" },
+  { "word": "hire", "meaning": "(動)雇う" },
+  { "word": "approve", "meaning": "(動)承認する、賛成する" },
+  { "word": "conduct", "meaning": "(動)実行する、実施する" },
+  { "word": "opportunity", "meaning": "(名)機会、チャンス" },
+  { "word": "deadline", "meaning": "(名)締め切り、期限" },
+  { "word": "corporate", "meaning": "(形)企業の、法人の" },
+  { "word": "warranty", "meaning": "(名)保証、保証書" },
+  { "word": "necessary", "meaning": "(形)必要な" },
+  { "word": "reserve", "meaning": "(動)予約する、確保する (名)蓄え" },
+  { "word": "resident", "meaning": "(名)住人、住民" },
+  { "word": "create", "meaning": "(動)創造する、作り出す" },
+  { "word": "inform", "meaning": "(動)知らせる、影響を与える" },
+  { "word": "allow", "meaning": "(動)許す、可能にする" },
+  { "word": "mention", "meaning": "(動)述べる、言及する (名)言及" },
+  { "word": "appreciate", "meaning": "(動)感謝する" },
+  { "word": "replacement", "meaning": "(名)交換、交換品、後任" }
+
+      
+    ];
+
+    let playerHP = 100;
+    let opponentHP = 100;
+    let currentWord = "";
+    let timer;
+    let timeLeft = 7;
+
+    function getRandomWord() {
+      const randomIndex = Math.floor(Math.random() * words.length);
+      currentWord = words[randomIndex].word;
+      
+      document.getElementById("meaning").textContent = words[randomIndex].meaning;
+      document.getElementById("input-box").value = "";
+      resetTimer();
+      updateHighlightedWord("");
+      
+      document.getElementById("word").textContent = currentWord;
+    }
+
+    function resetTimer() {
+      timeLeft = 7;
+      document.getElementById("time-left").textContent = timeLeft;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("time-left").textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          playerHP -= 2;
+          updateHP();
+          checkGameOver();
+          getRandomWord();
+        }
+      }, 1000);
+    }
+
+    function updateHP() {
+      document.getElementById("player-hp").textContent = playerHP;
+      document.getElementById("opponent-hp").textContent = opponentHP;
+      document.getElementById("player-hp").style.width = playerHP + "%";
+      document.getElementById("opponent-hp").style.width = opponentHP + "%";
+    }
+
+    function checkGameOver() {
+      if (playerHP <= 0) {
+        document.getElementById("message").textContent = "You lost!";
+        endGame();
+      } else if (opponentHP <= 0) {
+        document.getElementById("message").textContent = "You won!";
+        endGame();
+      }
+    }
+
+    function updateHighlightedWord(input) {
+      const wordElement = document.getElementById("word");
+      const highlightedWord = currentWord.split('').map((char, index) => {
+        return index < input.length && input[index] === char ? 
+          `<span class="highlight">${char}</span>` : char;
+      }).join('');
+      wordElement.innerHTML = highlightedWord;
+    }
+
+    document.getElementById("input-box").addEventListener("input", function() {
+      const input = this.value;
+
+      if (input === currentWord) {
+        opponentHP -= 2;
+        document.getElementById("message").textContent = "Correct!";
+        updateHighlightedWord(""); //追加
+        getRandomWord();
+      } else if (currentWord.indexOf(input) !== 0) {
+        playerHP -= 2;
+        document.getElementById("message").textContent = "Incorrect!";
+      }
+
+      updateHP();
+      checkGameOver();
+      updateHighlightedWord(input);
+    });
+
+    function endGame() {
+      clearInterval(timer);
+      document.getElementById("input-box").disabled = true;
+      document.getElementById("start-button").style.display = "inline";
+      document.getElementById("end-button").style.display = "none";
+    }
+
+    document.getElementById("start-button").addEventListener("click", function() {
+      playerHP = 100;
+      opponentHP = 100;
+      document.getElementById("message").textContent = "";
+      document.getElementById("input-box").disabled = false;
+
+      updateHighlightedWord(""); //追加
+
+      getRandomWord();
+      document.getElementById("start-button").style.display = "none";
+      document.getElementById("end-button").style.display = "inline";
+      updateHP();
+    });
+
+    document.getElementById("end-button").addEventListener("click", function() {
+      endGame();
+      document.getElementById("message").textContent = "Game Ended!";
+      updateHP();
+    });
+  </script>
+</body>
+</html>
