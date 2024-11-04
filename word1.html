@@ -126,7 +126,7 @@
   <div id="word"></div> <!-- 表示される英単語 -->
   <div id="meaning"></div>
   <input type="text" id="input-box" placeholder="Type here..." disabled />
-  <div id="timer">Time left: <span id="time-left">7</span> seconds</div>
+  <div id="timer">Time left: <span id="time-left">15</span> seconds</div>
   <div id="message"></div>
   <button id="start-button">Start Game</button>
   <button id="end-button" style="display:none;">End Game</button>
@@ -241,7 +241,7 @@
     let opponentHP = 100;
     let currentWord = "";
     let timer;
-    let timeLeft = 7;
+    let timeLeft = 15;
 
     function getRandomWord() {
       const randomIndex = Math.floor(Math.random() * words.length);
@@ -256,7 +256,7 @@
     }
 
     function resetTimer() {
-      timeLeft = 7;
+      timeLeft = 15;
       document.getElementById("time-left").textContent = timeLeft;
       clearInterval(timer);
       timer = setInterval(() => {
