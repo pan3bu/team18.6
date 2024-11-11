@@ -245,31 +245,37 @@
 
     
 
-    // HPバーの色を更新する関数
-function updateHPColor(id, hp) {
-  const hpBar = document.getElementById(id);
+ // HPの更新と色変更
+  function updateHP() {
+    const playerHPBar = document.getElementById("player-hp");
+    const opponentHPBar = document.getElementById("opponent-hp");
 
-  // HPの値に応じて色を変更
-  if (hp > 60) {
-    hpBar.style.backgroundColor = "green"; // HPが60以上は緑
-  } else if (hp > 30) {
-    hpBar.style.backgroundColor = "yellow"; // HPが30以上は黄色
-  } else {
-    hpBar.style.backgroundColor = "red"; // HPが30以下は赤
+    // プレイヤーのHPバー色を変更
+    if (playerHP > 40) {
+      playerHPBar.style.backgroundColor = "green"; // 高いHPは緑
+    } else if (playerHP > 20) {
+      playerHPBar.style.backgroundColor = "yellow"; // 中程度のHPは黄色
+    } else {
+      playerHPBar.style.backgroundColor = "red"; // 低いHPは赤
+    }
+
+    // 相手のHPバー色を変更
+    if (opponentHP > 40) {
+      opponentHPBar.style.backgroundColor = "green"; // 高いHPは緑
+    } else if (opponentHP > 20) {
+      opponentHPBar.style.backgroundColor = "yellow"; // 中程度のHPは黄色
+    } else {
+      opponentHPBar.style.backgroundColor = "red"; // 低いHPは赤
+    }
+
+    // HPバーの幅を更新
+    playerHPBar.style.width = playerHP + "%";
+    opponentHPBar.style.width = opponentHP + "%";
+
+    // 数値も更新
+    document.getElementById("player-hp").textContent = playerHP;
+    document.getElementById("opponent-hp").textContent = opponentHP;
   }
-}
-
-     
-function updateHP() {
-  document.getElementById("player-hp").textContent = playerHP;
-  document.getElementById("opponent-hp").textContent = opponentHP;
-  document.getElementById("player-hp").style.width = playerHP + "%";
-  document.getElementById("opponent-hp").style.width = opponentHP + "%";
-  
-  // HPバーの色を更新
-  updateHPColor("player-hp", playerHP);
-  updateHPColor("opponent-hp", opponentHP);
-}
 
     function getRandomWord() {
       const randomIndex = Math.floor(Math.random() * words.length);
@@ -301,12 +307,7 @@ function updateHP() {
       }, 1000);
     }
 
-    function updateHP() {
-      document.getElementById("player-hp").textContent = playerHP;
-      document.getElementById("opponent-hp").textContent = opponentHP;
-      document.getElementById("player-hp").style.width = playerHP + "%";
-      document.getElementById("opponent-hp").style.width = opponentHP + "%";
-    }
+  
 
     function checkGameOver() {
       if (playerHP <= 0) {
