@@ -349,7 +349,7 @@
         updateHighlightedWord(""); //追加
         getRandomWord();
       } else if (currentWord.indexOf(input) !== 0) {
-        playerHP -= 2;
+        playerHP -= 1;
         document.getElementById("message").textContent = "Incorrect!";
       }
 
