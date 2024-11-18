@@ -279,17 +279,27 @@
 
 
     
-    function getRandomWord() {
-      const randomIndex = Math.floor(Math.random() * words.length);
-      currentWord = words[randomIndex].word;
-      
-      document.getElementById("meaning").textContent = words[randomIndex].meaning;
-      document.getElementById("input-box").value = "";
-      resetTimer();
-      updateHighlightedWord("");
-      
-      document.getElementById("word").textContent = currentWord;
-    }
+   function getRandomWord() {
+  if (words.length === 0) {
+    document.getElementById("word").textContent = "ゲームオーバー！";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * words.length);
+  currentWord = words[randomIndex].word;
+
+  // 意味を表示
+  document.getElementById("meaning").textContent = words[randomIndex].meaning;
+  document.getElementById("input-box").value = "";
+  resetTimer();
+  updateHighlightedWord("");
+
+  // 現在の単語を表示
+  document.getElementById("word").textContent = currentWord;
+
+  // 取り出した単語をリストから削除
+  words.splice(randomIndex, 1);  // words 配列から取り出した単語を削除
+}
 
     function resetTimer() {
       timeLeft = 10;
