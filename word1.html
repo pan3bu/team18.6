@@ -343,12 +343,12 @@
 
       if (input === currentWord) {
         opponentHP -= 2;
-        document.getElementById("message").textContent = "Correct!";
+        
         updateHighlightedWord(""); //追加
         getRandomWord();
       } else if (currentWord.indexOf(input) !== 0) {
         playerHP -= 1;
-        document.getElementById("message").textContent = "Incorrect!";
+        
       }
 
       updateHP();
@@ -379,7 +379,7 @@
 
     document.getElementById("end-button").addEventListener("click", function() {
       endGame();
-      document.getElementById("message").textContent = "Game Ended!";
+     
       updateHP();
     });
   </script>
