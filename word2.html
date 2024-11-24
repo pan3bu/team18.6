@@ -243,6 +243,13 @@
     let timer;
     let timeLeft = 10;
 
+    //ゲームスタート時にインプットボックスに移動。
+    document.getElementById('start-button').addEventListener('click', function() {
+    const typingBox = document.getElementById('input-box');
+    typingBox.disabled = false; // disabledを解除
+    typingBox.focus()}); // テキストボックスにフォーカスを移動
+
+
 
 // HPの更新と色変更
   function updateHP() {
