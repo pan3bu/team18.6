@@ -336,6 +336,21 @@
       }
     }
 
+     //misstype
+    document.getElementById('input-box').addEventListener('input', function(event) {
+  const inputBox = event.target;
+  const inputText = inputBox.value;
+
+  // 入力が現在の単語の一部と一致している場合のみ反映
+  if (currentWord.startsWith(inputText)) {
+    // 正しい入力はそのまま
+    updateHighlightedWord(inputText); // ハイライトを更新
+  } else {
+    // 誤った入力は取り消し
+    inputBox.value = inputText.slice(0, -1); // 最後の文字を削除
+  }
+});
+
     function updateHighlightedWord(input) {
       const wordElement = document.getElementById("word");
       const highlightedWord = currentWord.split('').map((char, index) => {
@@ -351,9 +366,9 @@
       if (input === currentWord) {
         opponentHP -= 2;
         
-        updateHighlightedWord(""); //追加
+        
         getRandomWord();
-      } else if (currentWord.indexOf(input) !== 0) {
+      } else if (input !== currentWord) {
         playerHP -= 1;
         
       }
