@@ -339,7 +339,12 @@
     }
 
     //koko
-    // 入力が現在の単語の一部と一致している場合のみ反映
+   //misstype
+    document.getElementById('input-box').addEventListener('input', function(event) {
+  const inputBox = event.target;
+  const inputText = inputBox.value;
+
+      // 入力が現在の単語の一部と一致している場合のみ反映
   if (currentWord.startsWith(inputText)) {
     // 正しい入力はそのまま
     updateHighlightedWord(inputText); // ハイライトを更新
@@ -347,7 +352,7 @@
     // 誤った入力は取り消し
     inputBox.value = inputText.slice(0, -1); // 最後の文字を削除
     playerHP -=1;
-  }
+    }
 });
 
     function updateHighlightedWord(input) {
