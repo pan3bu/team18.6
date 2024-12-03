@@ -237,11 +237,11 @@
       
     ];
 
-    let playerHP = 100;
+   let playerHP = 100;
     let opponentHP = 100;
     let currentWord = "";
     let timer;
-    let timeLeft = 10;
+    let timeLeft = 15;
 
     //ゲームスタート時にインプットボックスに移動。
     document.getElementById('start-button').addEventListener('click', function() {
@@ -250,8 +250,9 @@
     typingBox.focus()}); // テキストボックスにフォーカスを移動
 
 
+    
 
-// HPの更新と色変更
+ // HPの更新と色変更
   function updateHP() {
     const playerHPBar = document.getElementById("player-hp");
     const opponentHPBar = document.getElementById("opponent-hp");
@@ -283,9 +284,6 @@
     document.getElementById("opponent-hp").textContent = opponentHP;
   }
 
-
-
-    
    function getRandomWord() {
   if (words.length === 0) {
     document.getElementById("word").textContent = "ゲームオーバー！";
@@ -294,6 +292,10 @@
 
   const randomIndex = Math.floor(Math.random() * words.length);
   currentWord = words[randomIndex].word;
+  
+  //koko
+  
+  
 
   // 意味を表示
   document.getElementById("meaning").textContent = words[randomIndex].meaning;
@@ -307,6 +309,7 @@
   // 取り出した単語をリストから削除
   words.splice(randomIndex, 1);  // words 配列から取り出した単語を削除
 }
+
 
     function resetTimer() {
       timeLeft = 10;
@@ -326,7 +329,7 @@
       }, 1000);
     }
 
-    
+  
 
     function checkGameOver() {
       if (playerHP <= 0) {
@@ -338,13 +341,16 @@
       }
     }
 
-    //koko
-   //misstype
+     //misstype
     document.getElementById('input-box').addEventListener('input', function(event) {
   const inputBox = event.target;
   const inputText = inputBox.value;
 
-      // 入力が現在の単語の一部と一致している場合のみ反映
+  
+  
+  
+  
+  // 入力が現在の単語の一部と一致している場合のみ反映
   if (currentWord.startsWith(inputText)) {
     // 正しい入力はそのまま
     updateHighlightedWord(inputText); // ハイライトを更新
@@ -352,8 +358,10 @@
     // 誤った入力は取り消し
     inputBox.value = inputText.slice(0, -1); // 最後の文字を削除
     playerHP -=1;
-    }
+  }
 });
+
+  
 
     function updateHighlightedWord(input) {
       const wordElement = document.getElementById("word");
@@ -363,20 +371,29 @@
       }).join('');
       wordElement.innerHTML = highlightedWord;
     }
+    
 
     document.getElementById("input-box").addEventListener("input", function() {
       const input = this.value;
+      let currentWordsplit = currentWord.split('');
+      let enteredTextWords = [];
+  
 
       if (input === currentWord) {
         opponentHP -= 2;
-       
-        updateHighlightedWord(""); //追加
-        getRandomWord();
-      } else if (currentWord.indexOf(input) !== 0) {
-        playerHP -= 1;
         
+        
+        getRandomWord();
       }
 
+       document.addEventListener('input',(e) =>{
+         if(inputBox.value = inputText.slice(0, -1)){
+
+         
+         }
+         
+      
+      });
       updateHP();
       checkGameOver();
       updateHighlightedWord(input);
@@ -405,9 +422,10 @@
 
     document.getElementById("end-button").addEventListener("click", function() {
       endGame();
-      
+     
       updateHP();
     });
+
   </script>
 </body>
 </html>
