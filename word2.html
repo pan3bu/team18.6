@@ -338,6 +338,18 @@
       }
     }
 
+    //koko
+    // 入力が現在の単語の一部と一致している場合のみ反映
+  if (currentWord.startsWith(inputText)) {
+    // 正しい入力はそのまま
+    updateHighlightedWord(inputText); // ハイライトを更新
+  } else {
+    // 誤った入力は取り消し
+    inputBox.value = inputText.slice(0, -1); // 最後の文字を削除
+    playerHP -=1;
+  }
+});
+
     function updateHighlightedWord(input) {
       const wordElement = document.getElementById("word");
       const highlightedWord = currentWord.split('').map((char, index) => {
