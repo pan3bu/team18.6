@@ -348,6 +348,7 @@
   } else {
     // 誤った入力は取り消し
     inputBox.value = inputText.slice(0, -1); // 最後の文字を削除
+    playerHP -=1;
   }
 });
 
@@ -368,10 +369,7 @@
         
         
         getRandomWord();
-      } else if (input !== currentWord) {
-        playerHP -= 1;
-        
-      }
+      } 
 
       updateHP();
       checkGameOver();
